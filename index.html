@@ -64,7 +64,6 @@
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Insira sua chave de acesso vitalício para liberar o aplicativo neste dispositivo.</p>
             </div>
             
-            <!-- Placeholder genérico para não expor a senha -->
             <input type="text" id="inputChaveAtivacao" placeholder="EX: CHAVE-DE-ACESSO" class="w-full bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-white text-sm rounded-xl px-4 py-3.5 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-purple-500 text-center font-mono font-bold uppercase tracking-wider">
             
             <button type="button" onclick="tentarAtivarApp()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3.5 rounded-xl text-sm shadow-lg shadow-purple-600/30 transition-all">
@@ -165,6 +164,32 @@
                     <input type="text" id="searchInputHome" oninput="filtrarHome()" placeholder="Buscar mensagens..." class="w-full bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-200 text-sm rounded-2xl pl-10 pr-4 py-3 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-purple-500 shadow-sm transition-colors">
                 </div>
 
+                <!-- BÍBLIA RÁPIDA NA TELA INICIAL -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 rounded-xl flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                            </div>
+                            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Bíblia Rápida</h3>
+                        </div>
+                        <span class="text-[11px] text-slate-400">Busca Instantânea</span>
+                    </div>
+
+                    <div class="flex space-x-2">
+                        <input type="text" id="inputBuscaBiblia" placeholder="Ex: João 3:16 ou Salmos 23:1" onkeydown="if(event.key==='Enter') pesquisarVersiculoRapido()" class="w-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-200 text-xs rounded-xl px-3.5 py-3 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-purple-500">
+                        <button type="button" onclick="pesquisarVersiculoRapido()" class="bg-purple-600 hover:bg-purple-700 text-white font-medium px-4 py-3 rounded-xl text-xs shadow-md shadow-purple-600/20 shrink-0">Pesquisar</button>
+                    </div>
+
+                    <div id="resultadoBibliaRapida" class="hidden bg-slate-50 dark:bg-slate-950 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span id="bibliaRefTitulo" class="text-xs font-bold text-purple-600 dark:text-purple-400">Referência</span>
+                            <button type="button" onclick="copiarVersiculoRapido()" class="text-[11px] text-slate-400 hover:text-purple-600">Copiar</button>
+                        </div>
+                        <p id="bibliaTextoConteudo" class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed italic"></p>
+                    </div>
+                </div>
+
                 <div class="space-y-3">
                     <span class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-1">Suas Mensagens</span>
                     
@@ -173,7 +198,27 @@
                 </div>
             </div>
 
-            <!-- TELA 2: PERFIL -->
+            <!-- TELA 2: BIBLIOTECA BÍBLIA COMPLETA (NOVA ABA) -->
+            <div id="viewBiblia" class="flex-1 overflow-y-auto p-4 sm:p-6 max-w-2xl mx-auto w-full space-y-4 hidden">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-4">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Pesquisar na Bíblia Sagrada</h3>
+                    <p class="text-xs text-slate-400">Digite qualquer livro, capítulo e versículo (ex: João 3:16, Gênesis 1:1, Salmos 91:1) para leitura rápida.</p>
+                    <div class="flex space-x-2">
+                        <input type="text" id="inputBuscaBibliaCompleta" placeholder="Ex: Romanos 8:28" onkeydown="if(event.key==='Enter') pesquisarVersiculoCompleto()" class="w-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-200 text-sm rounded-xl px-4 py-3 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-purple-500">
+                        <button type="button" onclick="pesquisarVersiculoCompleto()" class="bg-purple-600 hover:bg-purple-700 text-white font-medium px-5 py-3 rounded-xl text-sm shadow-md shadow-purple-600/20 shrink-0">Buscar</button>
+                    </div>
+                </div>
+
+                <div id="resultadoBibliaCompleta" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-3 hidden">
+                    <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <h4 id="completaRefTitulo" class="text-base font-bold text-purple-600 dark:text-purple-400">Referência</h4>
+                        <button type="button" onclick="copiarVersiculoCompleto()" class="text-xs bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-300 px-3 py-1.5 rounded-lg font-medium">Copiar Versículo</button>
+                    </div>
+                    <p id="completaTextoConteudo" class="text-sm text-slate-800 dark:text-slate-200 leading-relaxed font-serif-custom"></p>
+                </div>
+            </div>
+
+            <!-- TELA 3: PERFIL -->
             <div id="viewPerfil" class="flex-1 overflow-y-auto p-4 sm:p-6 max-w-lg mx-auto w-full space-y-6 hidden">
                 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm text-center space-y-4">
                     <div class="w-20 h-20 bg-purple-100 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 rounded-full mx-auto flex items-center justify-center text-2xl font-bold">
@@ -214,7 +259,7 @@
                 </div>
             </div>
 
-            <!-- TELA 3: EDITOR DE SERMÃO -->
+            <!-- TELA 4: EDITOR DE SERMÃO -->
             <div id="viewEditor" class="flex-1 flex flex-col overflow-hidden hidden">
                 <div class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-2 flex flex-wrap items-center gap-2 shrink-0">
                     <button type="button" onclick="mudarAba('home')" class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 p-1.5 rounded-md text-xs flex items-center space-x-1 hover:bg-slate-200 transition-colors">
@@ -259,14 +304,10 @@
                     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm space-y-3">
                         <input type="text" id="inputTitulo" oninput="atualizarTituloInstantaneo()" placeholder="Digite o título da pregação..." class="w-full bg-transparent text-xl sm:text-2xl font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none">
                         
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-100 dark:border-slate-800/80">
-                            <div class="flex items-center space-x-2 bg-slate-50 dark:bg-slate-950 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800">
-                                <svg class="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
-                                <input type="text" id="inputTema" placeholder="Tema / Série..." class="w-full bg-transparent text-sm text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none">
-                            </div>
+                        <div class="pt-2 border-t border-slate-100 dark:border-slate-800/80">
                             <div class="flex items-center space-x-2 bg-slate-50 dark:bg-slate-950 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800">
                                 <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                                <input type="text" id="inputVersiculo" placeholder="Texto Bíblico Chave..." class="w-full bg-transparent text-sm text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none">
+                                <input type="text" id="inputVersiculo" placeholder="Texto Bíblico Chave (Ex: João 3:16)..." class="w-full bg-transparent text-sm text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none">
                             </div>
                         </div>
                     </div>
@@ -289,11 +330,16 @@
                 </div>
             </div>
 
-            <!-- Barra Inferior -->
+            <!-- Barra Inferior com 4 Botões -->
             <nav id="bottomNav" class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 h-16 flex items-center justify-around px-2 shrink-0 z-20">
                 <button type="button" id="navBtnHome" onclick="mudarAba('home')" class="flex flex-col items-center justify-center w-16 text-purple-600 dark:text-purple-400 space-y-1">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     <span class="text-[10px] font-medium">Início</span>
+                </button>
+
+                <button type="button" id="navBtnBiblia" onclick="mudarAba('biblia')" class="flex flex-col items-center justify-center w-16 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 space-y-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    <span class="text-[10px] font-medium">Bíblia</span>
                 </button>
 
                 <button type="button" onclick="novoEsboco()" class="relative -top-3.5 bg-purple-600 hover:bg-purple-700 text-white w-14 h-14 rounded-full flex flex-col items-center justify-center shadow-lg shadow-purple-600/40 transition-transform transform active:scale-95" title="Novo Sermão">
@@ -312,13 +358,6 @@
     <!-- MODO PÚLPITO -->
     <div id="modalPulpito" class="fixed inset-0 bg-slate-950 z-50 hidden flex flex-col transition-colors">
         <div id="pulpitoHeaderContainer" class="bg-slate-100 border-b border-slate-200 px-4 py-3 flex flex-wrap items-center justify-between gap-2 shrink-0 transition-colors text-slate-900">
-            <div class="flex items-center space-x-4">
-                <div>
-                    <h2 id="pulpitoTitulo" class="text-base sm:text-lg font-bold truncate max-w-[160px] sm:max-w-md">Título</h2>
-                    <p id="pulpitoVersiculo" class="text-xs text-purple-600 dark:text-purple-400">Versículo</p>
-                </div>
-            </div>
-
             <div class="flex items-center space-x-2">
                 <div id="alertaEsgotado" class="hidden font-mono font-bold text-xs bg-rose-600 text-white px-2 py-1.5 rounded shadow-md alerta-texto flex items-center space-x-1">
                     <span>⚠️ TEMPO ESGOTADO</span>
@@ -363,13 +402,18 @@
         </div>
 
         <div id="pulpitoConteudoArea" class="flex-1 overflow-y-auto p-6 sm:p-12 transition-colors bg-white">
-            <div id="pulpitoTexto" class="max-w-3xl mx-auto text-slate-900 leading-relaxed space-y-6 font-sans-custom" style="font-size: 40px;"></div>
+            <div class="max-w-3xl mx-auto space-y-8">
+                <div class="pb-6 border-b border-slate-200 dark:border-slate-800 space-y-2">
+                    <h2 id="pulpitoTitulo" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white leading-snug">Título</h2>
+                    <p id="pulpitoVersiculo" class="text-sm sm:text-base font-medium text-purple-600 dark:text-purple-400">Versículo</p>
+                </div>
+                <div id="pulpitoTexto" class="text-slate-900 leading-relaxed space-y-6 font-sans-custom" style="font-size: 40px;"></div>
+            </div>
         </div>
     </div>
 
     <!-- Scripts -->
     <script>
-        // CHAVE DE ATIVAÇÃO ATUALIZADA
         const CHAVE_LICENCA_MESTRE = "PREGADOR-PRO-VIP";
 
         let esbocos = JSON.parse(localStorage.getItem('pregador_esbocos')) || [];
@@ -379,17 +423,15 @@
         let idParaExcluir = null;
         let tamanhoFontePulpito = 40;
         let cronometroInterval = null;
-        let cronometroSegundos = 0;
+        let cronometroSegundosRestantes = 0;
         let cronometroRodando = false;
         let pulpitoEscuro = false;
 
         document.addEventListener('DOMContentLoaded', () => {
-            // VERIFICA SE O APP JÁ FOI ATIVADO COM A CHAVE
             if (!appAtivado) {
                 document.getElementById('modalBloqueio').classList.remove('hidden');
                 return;
             }
-
             iniciarAplicativoPrincipal();
         });
 
@@ -417,7 +459,6 @@
                 esbocos.push({
                     id: Date.now().toString(),
                     titulo: 'Mensagem Inicial',
-                    tema: 'Fé e Renovação',
                     versiculo: 'Isaías 43:19',
                     conteudo: '<h2><strong>Introdução</strong></h2><p>Deus está fazendo coisas novas...</p>',
                     fonte: 'font-sans-custom',
@@ -430,13 +471,85 @@
             setInterval(atualizarRelogio, 1000);
         }
 
-        // CORREÇÃO DEFINITIVA DO DESTAQUE DE COR (MARCA-TEXTO)
+        // Função de busca rápida na Bíblia
+        async function buscarVersiculoApi(referencia) {
+            const refLimpa = referencia.trim();
+            if(!refLimpa) return null;
+            try {
+                const res = await fetch(`https://bible-api.com/${encodeURIComponent(refLimpa)}?translation=almeida`);
+                if(res.ok) {
+                    const data = await res.json();
+                    if(data && data.text) {
+                        return { referencia: data.reference, texto: data.text.trim() };
+                    }
+                }
+            } catch(e) {}
+            return null;
+        }
+
+        async function pesquisarVersiculoRapido() {
+            const val = document.getElementById('inputBuscaBiblia').value;
+            if(!val) return;
+            
+            const resBox = document.getElementById('resultadoBibliaRapida');
+            const refTitulo = document.getElementById('bibliaRefTitulo');
+            const textoConteudo = document.getElementById('bibliaTextoConteudo');
+            
+            refTitulo.innerText = "Pesquisando...";
+            textoConteudo.innerText = "Buscando na Bíblia...";
+            resBox.classList.remove('hidden');
+
+            const resultado = await buscarVersiculoApi(val);
+            if(resultado) {
+                refTitulo.innerText = resultado.referencia;
+                textoConteudo.innerText = `"${resultado.texto}"`;
+            } else {
+                refTitulo.innerText = "Não encontrado";
+                textoConteudo.innerText = "Verifique o formato (Ex: João 3:16) ou tente outro versículo.";
+            }
+        }
+
+        function copiarVersiculoRapido() {
+            const ref = document.getElementById('bibliaRefTitulo').innerText;
+            const texto = document.getElementById('bibliaTextoConteudo').innerText;
+            navigator.clipboard.writeText(`${texto} (${ref})`);
+            alert("📋 Versículo copiado para a área de transferência!");
+        }
+
+        async function pesquisarVersiculoCompleto() {
+            const val = document.getElementById('inputBuscaBibliaCompleta').value;
+            if(!val) return;
+
+            const resBox = document.getElementById('resultadoBibliaCompleta');
+            const refTitulo = document.getElementById('completaRefTitulo');
+            const textoConteudo = document.getElementById('completaTextoConteudo');
+
+            refTitulo.innerText = "Pesquisando...";
+            textoConteudo.innerText = "Buscando...";
+            resBox.classList.remove('hidden');
+
+            const resultado = await buscarVersiculoApi(val);
+            if(resultado) {
+                refTitulo.innerText = resultado.referencia;
+                textoConteudo.innerText = `"${resultado.texto}"`;
+            } else {
+                refTitulo.innerText = "Não encontrado";
+                textoConteudo.innerText = "Verifique se a referência está correta (Ex: Salmos 23:1).";
+            }
+        }
+
+        function copiarVersiculoCompleto() {
+            const ref = document.getElementById('completaRefTitulo').innerText;
+            const texto = document.getElementById('completaTextoConteudo').innerText;
+            navigator.clipboard.writeText(`${texto} (${ref})`);
+            alert("📋 Versículo copiado!");
+        }
+
         function destacarTexto(color) {
             const selection = window.getSelection();
             if (!selection.rangeCount || selection.isCollapsed) return;
 
             const range = selection.getRangeAt(0);
-            
             const span = document.createElement('span');
             span.style.backgroundColor = color;
             span.style.padding = '2px 4px';
@@ -444,9 +557,7 @@
             span.appendChild(range.extractContents());
             
             const textNodeZero = document.createTextNode('\u200B');
-
             range.insertNode(span);
-            
             if (span.nextSibling) {
                 span.parentNode.insertBefore(textNodeZero, span.nextSibling);
             } else {
@@ -456,24 +567,12 @@
             const newRange = document.createRange();
             newRange.setStartAfter(textNodeZero);
             newRange.collapse(true);
-            
             selection.removeAllRanges();
             selection.addRange(newRange);
-            
-            try {
-                document.execCommand('hiliteColor', false, 'transparent');
-                document.execCommand('backColor', false, 'transparent');
-            } catch (e) {}
         }
 
         function removerDestaque() {
-            const selection = window.getSelection();
-            if (!selection.rangeCount) return;
             execCmd('removeFormat');
-            try {
-                document.execCommand('hiliteColor', false, 'transparent');
-                document.execCommand('backColor', false, 'transparent');
-            } catch(e) {}
         }
 
         function salvarNomeUsuario() {
@@ -541,7 +640,6 @@
             esbocos = esbocos.filter(e => e.id !== idParaExcluir);
             salvarStorage();
             fecharModalExclusao();
-            
             if (esbocoAtualId === idParaExcluir) {
                 mudarAba('home');
             } else {
@@ -552,11 +650,13 @@
 
         function mudarAba(aba) {
             document.getElementById('viewHome').classList.add('hidden');
+            document.getElementById('viewBiblia').classList.add('hidden');
             document.getElementById('viewPerfil').classList.add('hidden');
             document.getElementById('viewEditor').classList.add('hidden');
             document.getElementById('btnModoPulpitoHeader').classList.add('hidden');
 
             document.getElementById('navBtnHome').className = 'flex flex-col items-center justify-center w-16 text-slate-400 space-y-1';
+            document.getElementById('navBtnBiblia').className = 'flex flex-col items-center justify-center w-16 text-slate-400 space-y-1';
             document.getElementById('navBtnPerfil').className = 'flex flex-col items-center justify-center w-16 text-slate-400 space-y-1';
 
             if (aba === 'home') {
@@ -564,6 +664,10 @@
                 document.getElementById('viewHome').classList.remove('hidden');
                 document.getElementById('navBtnHome').className = 'flex flex-col items-center justify-center w-16 text-purple-600 dark:text-purple-400 space-y-1';
                 renderizarHome();
+            } else if (aba === 'biblia') {
+                salvarEsbocoAtualSilencioso();
+                document.getElementById('viewBiblia').classList.remove('hidden');
+                document.getElementById('navBtnBiblia').className = 'flex flex-col items-center justify-center w-16 text-purple-600 dark:text-purple-400 space-y-1';
             } else if (aba === 'perfil') {
                 salvarEsbocoAtualSilencioso();
                 document.getElementById('viewPerfil').classList.remove('hidden');
@@ -583,7 +687,6 @@
             const tituloExibicao = (esboco.titulo === 'Nova Pregação' || esboco.titulo === 'Sem Título') ? '' : esboco.titulo;
 
             document.getElementById('inputTitulo').value = tituloExibicao;
-            document.getElementById('inputTema').value = esboco.tema || '';
             document.getElementById('inputVersiculo').value = esboco.versiculo || '';
             document.getElementById('editorContent').innerHTML = esboco.conteudo;
             document.getElementById('fontSelect').value = esboco.fonte || 'font-sans-custom';
@@ -598,7 +701,6 @@
             const novo = {
                 id: Date.now().toString(),
                 titulo: '',
-                tema: '',
                 versiculo: '',
                 conteudo: '<h2><strong>Introdução</strong></h2><p>Escreva os pontos principais aqui...</p>',
                 fonte: 'font-sans-custom',
@@ -608,7 +710,6 @@
             esbocos.unshift(novo);
             salvarStorage();
             abrirEditor(novo.id);
-            
             setTimeout(() => {
                 const inputT = document.getElementById('inputTitulo');
                 if(inputT) inputT.focus();
@@ -632,7 +733,6 @@
 
             const val = document.getElementById('inputTitulo').value;
             esbocos[index].titulo = val.trim() !== '' ? val : 'Sem Título';
-            esbocos[index].tema = document.getElementById('inputTema').value;
             esbocos[index].versiculo = document.getElementById('inputVersiculo').value;
             esbocos[index].conteudo = document.getElementById('editorContent').innerHTML;
             esbocos[index].fonte = document.getElementById('fontSelect').value;
@@ -656,7 +756,6 @@
 
             const filtrados = esbocos.filter(e => 
                 e.titulo.toLowerCase().includes(termo) || 
-                (e.tema && e.tema.toLowerCase().includes(termo)) ||
                 (e.versiculo && e.versiculo.toLowerCase().includes(termo))
             );
 
@@ -670,7 +769,6 @@
             filtrados.forEach(e => {
                 const div = document.createElement('div');
                 div.className = `p-4 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors flex items-center justify-between group`;
-                
                 div.onclick = () => abrirEditor(e.id);
 
                 div.innerHTML = `
@@ -713,8 +811,8 @@
             const atual = esbocos.find(e => e.id === esbocoAtualId);
             if (!atual) return;
 
-            document.getElementById('pulpitoTitulo').innerText = atual.titulo;
-            document.getElementById('pulpitoVersiculo').innerText = atual.versiculo || atual.tema || 'Modo Púlpito';
+            document.getElementById('pulpitoTitulo').innerText = atual.titulo || 'Sem Título';
+            document.getElementById('pulpitoVersiculo').innerText = atual.versiculo || 'Modo Púlpito';
             document.getElementById('pulpitoTexto').innerHTML = atual.conteudo;
             
             const fonteAtual = atual.fonte || 'font-sans-custom';
@@ -725,7 +823,6 @@
             document.getElementById('pulpitoTamanhoIndicador').innerText = tamanhoFontePulpito + 'px';
 
             document.getElementById('modalPulpito').classList.remove('hidden');
-            
             if ('wakeLock' in navigator) {
                 navigator.wakeLock.request('screen').catch(() => {});
             }
@@ -763,14 +860,12 @@
                 area.className = 'flex-1 overflow-y-auto p-6 sm:p-12 bg-slate-950 transition-colors';
                 texto.className = texto.className.replace('text-slate-900', 'text-slate-100');
                 if(!texto.classList.contains('text-slate-100')) texto.classList.add('text-slate-100');
-                
                 header.className = 'bg-slate-900 border-b border-slate-800 px-4 py-3 flex flex-wrap items-center justify-between gap-2 shrink-0 transition-colors text-white';
                 cronBox.className = 'flex items-center space-x-3 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800 shadow-inner transition-colors';
             } else {
                 area.className = 'flex-1 overflow-y-auto p-6 sm:p-12 bg-white transition-colors';
                 texto.className = texto.className.replace('text-slate-100', 'text-slate-900');
                 if(!texto.classList.contains('text-slate-900')) texto.classList.add('text-slate-900');
-
                 header.className = 'bg-slate-100 border-b border-slate-200 px-4 py-3 flex flex-wrap items-center justify-between gap-2 shrink-0 transition-colors text-slate-900';
                 cronBox.className = 'flex items-center space-x-3 bg-white px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm transition-colors';
             }
@@ -781,39 +876,43 @@
             document.getElementById('relogioAtual').innerText = agora.toTimeString().split(' ')[0];
             
             if (cronometroRodando) {
-                cronometroSegundos++;
-                const mins = Math.floor(cronometroSegundos / 60).toString().padStart(2, '0');
-                const secs = (cronometroSegundos % 60).toString().padStart(2, '0');
-                document.getElementById('cronometroDisplay').innerText = `${mins}:${secs}`;
+                if (cronometroSegundosRestantes > 0) {
+                    cronometroSegundosRestantes--;
+                    const mins = Math.floor(cronometroSegundosRestantes / 60).toString().padStart(2, '0');
+                    const secs = (cronometroSegundosRestantes % 60).toString().padStart(2, '0');
+                    document.getElementById('cronometroDisplay').innerText = `${mins}:${secs}`;
 
-                const metaMinInput = document.getElementById('tempoMetaMinutos').value;
-                const metaMin = metaMinInput ? parseInt(metaMinInput) : 0;
-                
-                if (metaMin > 0 && cronometroSegundos >= (metaMin * 60)) {
-                    cronometroRodando = false;
-                    document.getElementById('alertaEsgotado').classList.remove('hidden');
-                    
-                    const btn = document.getElementById('btnCronometro');
-                    btn.innerText = 'Iniciar';
-                    btn.className = 'bg-emerald-100 hover:bg-emerald-200 px-2 py-0.5 rounded text-[10px] text-emerald-800 border border-emerald-300 font-sans';
+                    if (cronometroSegundosRestantes === 0) {
+                        cronometroRodando = false;
+                        document.getElementById('alertaEsgotado').classList.remove('hidden');
+                        const btn = document.getElementById('btnCronometro');
+                        btn.innerText = 'Iniciar';
+                        btn.className = 'bg-emerald-100 hover:bg-emerald-200 px-2 py-0.5 rounded text-[10px] text-emerald-800 border border-emerald-300 font-sans';
+                    }
                 }
             }
         }
 
         function toggleCronometro() {
-            const metaMinInput = document.getElementById('tempoMetaMinutos').value;
-            const metaMin = metaMinInput ? parseInt(metaMinInput) : 0;
-
-            if (metaMin > 0 && cronometroSegundos >= (metaMin * 60)) {
-                return;
-            }
-
-            cronometroRodando = !cronometroRodando;
-            const btn = document.getElementById('btnCronometro');
-            if (cronometroRodando) {
+            if (!cronometroRodando) {
+                if (cronometroSegundosRestantes <= 0) {
+                    const metaMinInput = document.getElementById('tempoMetaMinutos').value;
+                    const metaMin = metaMinInput ? parseInt(metaMinInput) : 0;
+                    if (metaMin > 0) {
+                        cronometroSegundosRestantes = metaMin * 60;
+                    } else {
+                        alert("Por favor, digite os minutos desejados.");
+                        return;
+                    }
+                }
+                cronometroRodando = true;
+                document.getElementById('alertaEsgotado').classList.add('hidden');
+                const btn = document.getElementById('btnCronometro');
                 btn.innerText = 'Pausar';
                 btn.className = 'bg-amber-100 hover:bg-amber-200 px-2 py-0.5 rounded text-[10px] text-amber-800 border border-amber-300 font-sans';
             } else {
+                cronometroRodando = false;
+                const btn = document.getElementById('btnCronometro');
                 btn.innerText = 'Continuar';
                 btn.className = 'bg-emerald-100 hover:bg-emerald-200 px-2 py-0.5 rounded text-[10px] text-emerald-800 border border-emerald-300 font-sans';
             }
@@ -821,7 +920,7 @@
 
         function resetCronometro() {
             cronometroRodando = false;
-            cronometroSegundos = 0;
+            cronometroSegundosRestantes = 0;
             document.getElementById('cronometroDisplay').innerText = '00:00';
             document.getElementById('alertaEsgotado').classList.add('hidden');
             const btn = document.getElementById('btnCronometro');
@@ -835,4 +934,3 @@
     </script>
 </body>
 </html>
-
