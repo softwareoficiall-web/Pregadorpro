@@ -53,6 +53,27 @@
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans-custom min-h-screen flex flex-col antialiased selection:bg-purple-500 selection:text-white transition-colors duration-200">
 
+    <!-- TELA DE BLOQUEIO / ATIVAÇÃO (SEGURANÇA CONTRA CÓPIA DO LINK) -->
+    <div id="modalBloqueio" class="fixed inset-0 bg-slate-950 z-[100] flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 max-w-sm w-full shadow-2xl space-y-6 border border-slate-200 dark:border-slate-800 text-center">
+            <div class="w-16 h-16 bg-purple-100 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 rounded-2xl mx-auto flex items-center justify-center shadow-inner">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white">PregadorPro Protetor</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Insira sua chave de acesso vitalício para liberar o aplicativo neste dispositivo.</p>
+            </div>
+            
+            <input type="text" id="inputChaveAtivacao" placeholder="EX: PREGADOR-GRACE-777" class="w-full bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-white text-sm rounded-xl px-4 py-3.5 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-purple-500 text-center font-mono font-bold uppercase tracking-wider">
+            
+            <button type="button" onclick="tentarAtivarApp()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3.5 rounded-xl text-sm shadow-lg shadow-purple-600/30 transition-all">
+                Ativar Acesso
+            </button>
+            
+            <p class="text-[11px] text-slate-400">Dúvidas ou suporte? Adquira sua licença oficial conosco.</p>
+        </div>
+    </div>
+
     <!-- Modal de Primeiro Acesso (Pedir Nome) -->
     <div id="modalOnboarding" class="fixed inset-0 bg-slate-950/80 z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-sm w-full shadow-2xl space-y-4 border border-slate-200 dark:border-slate-800 text-center">
@@ -347,8 +368,12 @@
 
     <!-- Scripts -->
     <script>
+        // CHAVE DE ATIVAÇÃO / SEGURANÇA COMERCIAL
+        const CHAVE_LICENCA_MESTRE = "PREGADOR-GRACE-777";
+
         let esbocos = JSON.parse(localStorage.getItem('pregador_esbocos')) || [];
         let nomeUsuario = localStorage.getItem('pregador_nome') || '';
+        let appAtivado = localStorage.getItem('pregador_pro_ativado') === 'true';
         let esbocoAtualId = null;
         let idParaExcluir = null;
         let tamanhoFontePulpito = 40;
@@ -358,6 +383,29 @@
         let pulpitoEscuro = false;
 
         document.addEventListener('DOMContentLoaded', () => {
+            // VERIFICA SE O APP JÁ FOI ATIVADO COM A CHAVE
+            if (!appAtivado) {
+                document.getElementById('modalBloqueio').classList.remove('hidden');
+                return;
+            }
+
+            iniciarAplicativoPrincipal();
+        });
+
+        function tentarAtivarApp() {
+            const digitado = document.getElementById('inputChaveAtivacao').value.trim().toUpperCase();
+            if (digitado === CHAVE_LICENCA_MESTRE) {
+                localStorage.setItem('pregador_pro_ativado', 'true');
+                appAtivado = true;
+                document.getElementById('modalBloqueio').classList.add('hidden');
+                alert("✨ Aplicativo ativado com sucesso!");
+                iniciarAplicativoPrincipal();
+            } else {
+                alert("❌ Chave inválida. Verifique o código de acesso.");
+            }
+        }
+
+        function iniciarAplicativoPrincipal() {
             if (!nomeUsuario) {
                 document.getElementById('modalOnboarding').classList.remove('hidden');
             } else {
@@ -379,7 +427,7 @@
             }
             renderizarHome();
             setInterval(atualizarRelogio, 1000);
-        });
+        }
 
         // CORREÇÃO DEFINITIVA DO DESTAQUE DE COR (MARCA-TEXTO)
         function destacarTexto(color) {
