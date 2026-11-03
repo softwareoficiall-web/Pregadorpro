@@ -1,3 +1,10 @@
+Com certeza! Atualizei o código para que, toda vez que você clicar para criar um novo esboço, ele já venha preenchido automaticamente com essa estrutura padrão exata que você mostrou na imagem:
+ * Introdução...
+ * 1 - Ponto
+ * 2 - Ponto
+ * 3 - Ponto
+ * Conclusão.
+Aqui está o código completo e atualizado do seu index.html pronto para uso:
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -53,7 +60,7 @@
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans-custom min-h-screen flex flex-col antialiased selection:bg-purple-500 selection:text-white transition-colors duration-200">
 
-    <!-- TELA DE BLOQUEIO / ATIVAÇÃO (SEGURANÇA CONTRA CÓPIA DO LINK) -->
+    <!-- TELA DE BLOQUEIO / ATIVAÇÃO -->
     <div id="modalBloqueio" class="fixed inset-0 bg-slate-950 z-[100] flex items-center justify-center p-4 hidden">
         <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 max-w-sm w-full shadow-2xl space-y-6 border border-slate-200 dark:border-slate-800 text-center">
             <div class="w-16 h-16 bg-purple-100 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 rounded-2xl mx-auto flex items-center justify-center shadow-inner">
@@ -198,7 +205,7 @@
                 </div>
             </div>
 
-            <!-- TELA 2: BIBLIOTECA BÍBLIA COMPLETA (NOVA ABA) -->
+            <!-- TELA 2: BIBLIOTECA BÍBLIA COMPLETA -->
             <div id="viewBiblia" class="flex-1 overflow-y-auto p-4 sm:p-6 max-w-2xl mx-auto w-full space-y-4 hidden">
                 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-4">
                     <h3 class="text-lg font-bold text-slate-900 dark:text-white">Pesquisar na Bíblia Sagrada</h3>
@@ -330,7 +337,7 @@
                 </div>
             </div>
 
-            <!-- Barra Inferior com 4 Botões -->
+            <!-- Barra Inferior -->
             <nav id="bottomNav" class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 h-16 flex items-center justify-around px-2 shrink-0 z-20">
                 <button type="button" id="navBtnHome" onclick="mudarAba('home')" class="flex flex-col items-center justify-center w-16 text-purple-600 dark:text-purple-400 space-y-1">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
@@ -460,7 +467,7 @@
                     id: Date.now().toString(),
                     titulo: 'Mensagem Inicial',
                     versiculo: 'Isaías 43:19',
-                    conteudo: '<h2><strong>Introdução</strong></h2><p>Deus está fazendo coisas novas...</p>',
+                    conteudo: '<p><strong>Introdução...</strong></p><p><br></p><p><strong>1 - Ponto</strong></p><p><br></p><p><strong>2 - Ponto</strong></p><p><br></p><p><strong>3 - Ponto</strong></p><p><br></p><p><strong>Conclusão.</strong></p>',
                     fonte: 'font-sans-custom',
                     tamanho: 'text-base',
                     data: '21 de out.'
@@ -471,7 +478,6 @@
             setInterval(atualizarRelogio, 1000);
         }
 
-        // Função de busca rápida na Bíblia
         async function buscarVersiculoApi(referencia) {
             const refLimpa = referencia.trim();
             if(!refLimpa) return null;
@@ -702,7 +708,7 @@
                 id: Date.now().toString(),
                 titulo: '',
                 versiculo: '',
-                conteudo: '<h2><strong>Introdução</strong></h2><p>Escreva os pontos principais aqui...</p>',
+                conteudo: '<p><strong>Introdução...</strong></p><p><br></p><p><strong>1 - Ponto</strong></p><p><br></p><p><strong>2 - Ponto</strong></p><p><br></p><p><strong>3 - Ponto</strong></p><p><br></p><p><strong>Conclusão.</strong></p>',
                 fonte: 'font-sans-custom',
                 tamanho: 'text-base',
                 data: dataAtual
@@ -934,3 +940,4 @@
     </script>
 </body>
 </html>
+
