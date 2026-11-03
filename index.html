@@ -218,7 +218,33 @@
                 </div>
             </div>
 
-            <!-- TELA 3: PERFIL -->
+            <!-- TELA 3: AGENDA DE CULTOS E PREGAÇÕES -->
+            <div id="viewAgenda" class="flex-1 overflow-y-auto p-4 sm:p-6 max-w-2xl mx-auto w-full space-y-6 hidden">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-4">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Nova Agenda / Culto</h3>
+                    <div class="space-y-3">
+                        <input type="text" id="agendaTitulo" placeholder="Título do evento (Ex: Culto de Santa Ceia)..." class="w-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-200 text-sm rounded-xl px-4 py-3 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-purple-500">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <input type="date" id="agendaData" class="w-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-200 text-sm rounded-xl px-4 py-3 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-purple-500">
+                            <input type="text" id="agendaHorario" placeholder="Horário (Ex: 19:30)" class="w-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-200 text-sm rounded-xl px-4 py-3 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-purple-500">
+                        </div>
+                        <input type="text" id="agendaLocal" placeholder="Local / Igreja (Ex: AD Central)..." class="w-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-200 text-sm rounded-xl px-4 py-3 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-purple-500">
+                        
+                        <button type="button" onclick="adicionarCompromissoAgenda()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 rounded-xl text-sm shadow-lg shadow-purple-600/30 transition-all">
+                            Adicionar à Agenda
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-1">Seus Compromissos Agendados</span>
+                    <div id="listaAgendaContainer" class="space-y-3">
+                        <!-- Itens da agenda injetados via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- TELA 4: PERFIL -->
             <div id="viewPerfil" class="flex-1 overflow-y-auto p-4 sm:p-6 max-w-lg mx-auto w-full space-y-6 hidden">
                 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm text-center space-y-4">
                     <div class="w-20 h-20 bg-purple-100 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 rounded-full mx-auto flex items-center justify-center text-2xl font-bold">
@@ -281,7 +307,7 @@
                 </div>
             </div>
 
-            <!-- TELA 4: EDITOR DE SERMÃO -->
+            <!-- TELA 5: EDITOR DE SERMÃO -->
             <div id="viewEditor" class="flex-1 flex flex-col overflow-hidden hidden">
                 <div class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-2 flex flex-wrap items-center gap-2 shrink-0">
                     <button type="button" onclick="mudarAba('home')" class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 p-1.5 rounded-md text-xs flex items-center space-x-1 hover:bg-slate-200 transition-colors">
@@ -368,6 +394,11 @@
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                 </button>
 
+                <button type="button" id="navBtnAgenda" onclick="mudarAba('agenda')" class="flex flex-col items-center justify-center w-16 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 space-y-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    <span class="text-[10px] font-medium">Agenda</span>
+                </button>
+
                 <button type="button" id="navBtnPerfil" onclick="mudarAba('perfil')" class="flex flex-col items-center justify-center w-16 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 space-y-1">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                     <span class="text-[10px] font-medium">Perfil</span>
@@ -439,6 +470,7 @@
         const CHAVE_LICENCA_MESTRE = "PREGADOR-PRO-VIP";
 
         let esbocos = JSON.parse(localStorage.getItem('pregador_esbocos')) || [];
+        let agendaEventos = JSON.parse(localStorage.getItem('pregador_agenda')) || [];
         let nomeUsuario = localStorage.getItem('pregador_nome') || '';
         let appAtivado = localStorage.getItem('pregador_pro_ativado') === 'true';
         let esbocoAtualId = null;
@@ -490,18 +522,17 @@
                 salvarStorage();
             }
             renderizarHome();
+            renderizarAgenda();
             setInterval(atualizarRelogio, 1000);
         }
 
         // Funções de Backup e Restauração
         function exportarBackup() {
-            const dados = localStorage.getItem('pregador_esbocos');
-            if (!dados || JSON.parse(dados).length === 0) {
-                alert("Não há pregações salvas para exportar!");
-                return;
-            }
+            const dadosSermoes = localStorage.getItem('pregador_esbocos') || '[]';
+            const dadosAgenda = localStorage.getItem('pregador_agenda') || '[]';
+            const backupObj = { sermoes: JSON.parse(dadosSermoes), agenda: JSON.parse(dadosAgenda) };
             
-            const blob = new Blob([dados], { type: 'application/json' });
+            const blob = new Blob([JSON.stringify(backupObj)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             
             const a = document.createElement('a');
@@ -520,19 +551,92 @@
             const leitor = new FileReader();
             leitor.onload = function(e) {
                 try {
-                    const dadosImportados = JSON.parse(e.target.result);
-                    if (Array.isArray(dadosImportados)) {
-                        localStorage.setItem('pregador_esbocos', JSON.stringify(dadosImportados));
-                        alert("✨ Backup restaurado com sucesso! O aplicativo será atualizado.");
-                        location.reload();
-                    } else {
-                        alert("❌ O arquivo de backup é inválido.");
+                    const obj = JSON.parse(e.target.result);
+                    if (Array.isArray(obj)) {
+                        // Compatibilidade com backups antigos apenas de sermões
+                        localStorage.setItem('pregador_esbocos', JSON.stringify(obj));
+                    } else if (obj && obj.sermoes) {
+                        localStorage.setItem('pregador_esbocos', JSON.stringify(obj.sermoes));
+                        if(obj.agenda) localStorage.setItem('pregador_agenda', JSON.stringify(obj.agenda));
                     }
+                    alert("✨ Backup restaurado com sucesso! O aplicativo será atualizado.");
+                    location.reload();
                 } catch (err) {
                     alert("❌ Erro ao ler o arquivo JSON.");
                 }
             };
             leitor.readAsText(arquivo);
+        }
+
+        // Funções da Agenda
+        function adicionarCompromissoAgenda() {
+            const titulo = document.getElementById('agendaTitulo').value.trim();
+            const data = document.getElementById('agendaData').value;
+            const horario = document.getElementById('agendaHorario').value.trim();
+            const local = document.getElementById('agendaLocal').value.trim();
+
+            if (!titulo) {
+                alert("Por favor, informe o título do evento.");
+                return;
+            }
+
+            const novoEvento = {
+                id: Date.now().toString(),
+                titulo,
+                data: data ? data.split('-').reverse().join('/') : 'Data não informada',
+                horario: horario || 'Horário livre',
+                local: local || 'Local não informado'
+            };
+
+            agendaEventos.unshift(novoEvento);
+            salvarAgendaStorage();
+            renderizarAgenda();
+
+            // Limpar inputs
+            document.getElementById('agendaTitulo').value = '';
+            document.getElementById('agendaData').value = '';
+            document.getElementById('agendaHorario').value = '';
+            document.getElementById('agendaLocal').value = '';
+        }
+
+        function removerCompromissoAgenda(id) {
+            agendaEventos = agendaEventos.filter(e => e.id !== id);
+            salvarAgendaStorage();
+            renderizarAgenda();
+        }
+
+        function salvarAgendaStorage() {
+            localStorage.setItem('pregador_agenda', JSON.stringify(agendaEventos));
+        }
+
+        function renderizarAgenda() {
+            const container = document.getElementById('listaAgendaContainer');
+            if(!container) return;
+            container.innerHTML = '';
+
+            if (agendaEventos.length === 0) {
+                container.innerHTML = `<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 text-center text-sm text-slate-400">Nenhum culto ou pregação agendado.</div>`;
+                return;
+            }
+
+            agendaEventos.forEach(e => {
+                const div = document.createElement('div');
+                div.className = "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm flex items-center justify-between";
+                div.innerHTML = `
+                    <div class="space-y-1 pr-2">
+                        <h4 class="font-bold text-slate-900 dark:text-white text-base">${e.titulo}</h4>
+                        <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400 font-medium">
+                            <span class="bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-300 px-2 py-0.5 rounded-md">📅 ${e.data}</span>
+                            <span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded-md">⏰ ${e.horario}</span>
+                            <span class="bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-300 px-2 py-0.5 rounded-md">📍 ${e.local}</span>
+                        </div>
+                    </div>
+                    <button type="button" onclick="removerCompromissoAgenda('${e.id}')" class="p-2 text-rose-500 hover:text-rose-700 bg-rose-50 dark:bg-rose-950/40 rounded-xl transition-colors shrink-0" title="Excluir">
+                        <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    </button>
+                `;
+                container.appendChild(div);
+            });
         }
 
         async function buscarVersiculoApi(referencia) {
@@ -714,12 +818,14 @@
         function mudarAba(aba) {
             document.getElementById('viewHome').classList.add('hidden');
             document.getElementById('viewBiblia').classList.add('hidden');
+            document.getElementById('viewAgenda').classList.add('hidden');
             document.getElementById('viewPerfil').classList.add('hidden');
             document.getElementById('viewEditor').classList.add('hidden');
             document.getElementById('btnModoPulpitoHeader').classList.add('hidden');
 
             document.getElementById('navBtnHome').className = 'flex flex-col items-center justify-center w-16 text-slate-400 space-y-1';
             document.getElementById('navBtnBiblia').className = 'flex flex-col items-center justify-center w-16 text-slate-400 space-y-1';
+            document.getElementById('navBtnAgenda').className = 'flex flex-col items-center justify-center w-16 text-slate-400 space-y-1';
             document.getElementById('navBtnPerfil').className = 'flex flex-col items-center justify-center w-16 text-slate-400 space-y-1';
 
             if (aba === 'home') {
@@ -731,6 +837,11 @@
                 salvarEsbocoAtualSilencioso();
                 document.getElementById('viewBiblia').classList.remove('hidden');
                 document.getElementById('navBtnBiblia').className = 'flex flex-col items-center justify-center w-16 text-purple-600 dark:text-purple-400 space-y-1';
+            } else if (aba === 'agenda') {
+                salvarEsbocoAtualSilencioso();
+                document.getElementById('viewAgenda').classList.remove('hidden');
+                document.getElementById('navBtnAgenda').className = 'flex flex-col items-center justify-center w-16 text-purple-600 dark:text-purple-400 space-y-1';
+                renderizarAgenda();
             } else if (aba === 'perfil') {
                 salvarEsbocoAtualSilencioso();
                 document.getElementById('viewPerfil').classList.remove('hidden');
