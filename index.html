@@ -64,7 +64,8 @@
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Insira sua chave de acesso vitalício para liberar o aplicativo neste dispositivo.</p>
             </div>
             
-            <input type="text" id="inputChaveAtivacao" placeholder="EX: PREGADOR-GRACE-777" class="w-full bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-white text-sm rounded-xl px-4 py-3.5 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-purple-500 text-center font-mono font-bold uppercase tracking-wider">
+            <!-- Placeholder genérico para não expor a senha -->
+            <input type="text" id="inputChaveAtivacao" placeholder="EX: CHAVE-DE-ACESSO" class="w-full bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-white text-sm rounded-xl px-4 py-3.5 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-purple-500 text-center font-mono font-bold uppercase tracking-wider">
             
             <button type="button" onclick="tentarAtivarApp()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3.5 rounded-xl text-sm shadow-lg shadow-purple-600/30 transition-all">
                 Ativar Acesso
@@ -368,8 +369,8 @@
 
     <!-- Scripts -->
     <script>
-        // CHAVE DE ATIVAÇÃO / SEGURANÇA COMERCIAL
-        const CHAVE_LICENCA_MESTRE = "PREGADOR-GRACE-777";
+        // CHAVE DE ATIVAÇÃO ATUALIZADA
+        const CHAVE_LICENCA_MESTRE = "PREGADOR-PRO-VIP";
 
         let esbocos = JSON.parse(localStorage.getItem('pregador_esbocos')) || [];
         let nomeUsuario = localStorage.getItem('pregador_nome') || '';
@@ -834,3 +835,4 @@
     </script>
 </body>
 </html>
+
