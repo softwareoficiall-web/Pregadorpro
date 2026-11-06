@@ -49,28 +49,63 @@
             50% { opacity: 0.5; transform: scale(1.03); }
         }
         .alerta-texto { animation: pulse-text 0.8s infinite ease-in-out; }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+        }
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans-custom min-h-screen flex flex-col antialiased selection:bg-purple-500 selection:text-white transition-colors duration-200">
 
-    <!-- TELA DE BLOQUEIO / ATIVAÇÃO -->
+    <!-- TELA DE BLOQUEIO / ATIVAÇÃO (CHAVE MESTRE) -->
     <div id="modalBloqueio" class="fixed inset-0 bg-slate-950 z-[100] flex items-center justify-center p-4 hidden">
         <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 max-w-sm w-full shadow-2xl space-y-6 border border-slate-200 dark:border-slate-800 text-center">
             <div class="w-16 h-16 bg-purple-100 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 rounded-2xl mx-auto flex items-center justify-center shadow-inner">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
             </div>
             <div>
-                <h3 class="text-xl font-bold text-slate-900 dark:text-white">PregadorPro Protetor</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Insira sua chave de acesso vitalício para liberar o aplicativo neste dispositivo.</p>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white">PregadorPro PRO</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Insira sua chave de acesso vitalício para liberar o aplicativo completo neste dispositivo.</p>
             </div>
             
             <input type="text" id="inputChaveAtivacao" placeholder="EX: CHAVE-DE-ACESSO" class="w-full bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-white text-sm rounded-xl px-4 py-3.5 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-purple-500 text-center font-mono font-bold uppercase tracking-wider">
             
             <button type="button" onclick="tentarAtivarApp()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3.5 rounded-xl text-sm shadow-lg shadow-purple-600/30 transition-all">
-                Ativar Acesso
+                Ativar Acesso Pro
             </button>
             
-            <p class="text-[11px] text-slate-400">Dúvidas ou suporte? Adquira sua licença oficial conosco.</p>
+            <p class="text-[11px] text-slate-400">Adquiriu a chave pelo WhatsApp? Insira o código recebido.</p>
+        </div>
+    </div>
+
+    <!-- MODAL DE UPGRADE (LIMITE DE 3 SERMÕES ATINGIDO) -->
+    <div id="modalUpgrade" class="fixed inset-0 bg-slate-950/80 z-[110] flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-sm w-full shadow-2xl space-y-5 border border-slate-200 dark:border-slate-800 text-center">
+            <div class="w-14 h-14 bg-purple-100 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 rounded-2xl mx-auto flex items-center justify-center">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Limite Grátis Atingido (3/3)</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">Você atingiu o limite de sermões do plano gratuito. Para criar pregações ilimitadas, adquira a versão Pro direto com o desenvolvedor!</p>
+            </div>
+            
+            <div class="space-y-2 pt-1">
+                <a href="https://wa.me/5582999173401?text=Paz%20do%20Senhor!%20Quero%20adquirir%20a%20versão%20vitalícia%20do%20PregadorPro." target="_blank" class="block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 rounded-xl text-sm shadow-lg shadow-emerald-600/30 transition-all text-center">
+                    💬 Adquirir Versão Pro no WhatsApp
+                </a>
+                <button type="button" onclick="fecharModalUpgrade()" class="w-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium py-2.5 rounded-xl text-xs hover:bg-slate-200 transition-colors">
+                    Já tenho uma chave / Voltar
+                </button>
+            </div>
         </div>
     </div>
 
@@ -157,6 +192,17 @@
                     </div>
                 </div>
 
+                <!-- BANNER DE STATUS DO PLANO (DIRECIONA PARA WHATSAPP) -->
+                <div id="bannerPlano" class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-4 text-white shadow-md flex items-center justify-between">
+                    <div>
+                        <span id="bannerTituloPlano" class="text-xs uppercase font-bold tracking-wider bg-white/20 px-2 py-0.5 rounded">Plano Gratuito</span>
+                        <p id="bannerDescPlano" class="text-sm font-medium mt-1">Crie até 3 sermões. Adquira o ilimitado com o desenvolvedor!</p>
+                    </div>
+                    <a href="https://wa.me/5582999173401?text=Paz%20do%20Senhor!%20Quero%20adquirir%20a%20versão%20vitalícia%20do%20PregadorPro." target="_blank" class="bg-white text-purple-700 font-bold px-3 py-2 rounded-xl text-xs shadow hover:bg-purple-50 transition-colors shrink-0 ml-2">
+                        Quero Pro
+                    </a>
+                </div>
+
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -224,8 +270,11 @@
                     <h3 class="text-lg font-bold text-slate-900 dark:text-white">Nova Agenda / Culto</h3>
                     <div class="space-y-3">
                         <input type="text" id="agendaTitulo" placeholder="Título do evento (Ex: Culto de Santa Ceia)..." class="w-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-200 text-sm rounded-xl px-4 py-3 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-purple-500">
+                        
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <input type="date" id="agendaData" class="w-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-200 text-sm rounded-xl px-4 py-3 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-purple-500">
+                            <div class="relative">
+                                <input type="date" id="agendaData" class="w-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-200 text-sm rounded-xl px-4 py-3 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-purple-500 uppercase">
+                            </div>
                             <input type="text" id="agendaHorario" placeholder="Horário (Ex: 19:30)" class="w-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-200 text-sm rounded-xl px-4 py-3 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-purple-500">
                         </div>
                         <input type="text" id="agendaLocal" placeholder="Local / Igreja (Ex: AD Central)..." class="w-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-200 text-sm rounded-xl px-4 py-3 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-purple-500">
@@ -247,9 +296,18 @@
             <!-- TELA 4: PERFIL -->
             <div id="viewPerfil" class="flex-1 overflow-y-auto p-4 sm:p-6 max-w-lg mx-auto w-full space-y-6 hidden">
                 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm text-center space-y-4">
-                    <div class="w-20 h-20 bg-purple-100 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 rounded-full mx-auto flex items-center justify-center text-2xl font-bold">
-                        <span id="perfilAvatarInicial">K</span>
+                    <!-- FOTO DE PERFIL COM OPÇÃO DE ESCOLHER DA GALERIA -->
+                    <div class="relative w-24 h-24 mx-group mx-auto">
+                        <div id="perfilAvatarContainer" class="w-24 h-24 bg-purple-100 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 rounded-full mx-auto flex items-center justify-center text-3xl font-bold overflow-hidden border-2 border-purple-500/30 shadow-inner cursor-pointer" onclick="document.getElementById('inputFotoGaleria').click()" title="Alterar foto de perfil">
+                            <span id="perfilAvatarInicial">K</span>
+                            <img id="perfilAvatarImg" src="" alt="Foto de Perfil" class="w-full h-full object-cover hidden">
+                        </div>
+                        <button type="button" onclick="document.getElementById('inputFotoGaleria').click()" class="absolute bottom-0 right-0 bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-full shadow-lg border-2 border-white dark:border-slate-900 transition-transform hover:scale-105" title="Escolher foto da galeria">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </button>
+                        <input type="file" id="inputFotoGaleria" accept="image/*" onchange="carregarFotoGaleria(event)" class="hidden">
                     </div>
+
                     <div>
                         <h3 id="perfilNomeExibicao" class="text-xl font-bold text-slate-900 dark:text-white">Nome</h3>
                         <p class="text-xs text-slate-400 mt-0.5">Pregador(a) Cadastrado</p>
@@ -261,7 +319,7 @@
                             <span class="text-[11px] text-slate-400">Mensagens Salvas</span>
                         </div>
                         <div class="bg-slate-50 dark:bg-slate-950 p-3 rounded-2xl">
-                            <span class="block text-lg font-bold text-emerald-600 dark:text-emerald-400">Pro</span>
+                            <span id="perfilStatusBadge" class="block text-lg font-bold text-emerald-600 dark:text-emerald-400">Grátis</span>
                             <span class="text-[11px] text-slate-400">Versão do App</span>
                         </div>
                     </div>
@@ -304,6 +362,15 @@
                         <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         <input type="file" id="inputArquivoBackup" accept=".json" onchange="importarBackup(event)" class="hidden">
                     </label>
+
+                    <!-- OPÇÃO DE LIMPAR TODOS OS DADOS DO APP -->
+                    <button type="button" onclick="limparTodosDadosApp()" class="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors text-rose-600 dark:text-rose-400 text-sm font-medium pt-2">
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            <span>Apagar Todos os Dados do App</span>
+                        </div>
+                        <svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
                 </div>
             </div>
 
@@ -468,10 +535,12 @@
     <!-- Scripts -->
     <script>
         const CHAVE_LICENCA_MESTRE = "PREGADOR-PRO-VIP";
+        const LIMITE_SERMOES_GRATIS = 3;
 
         let esbocos = JSON.parse(localStorage.getItem('pregador_esbocos')) || [];
         let agendaEventos = JSON.parse(localStorage.getItem('pregador_agenda')) || [];
         let nomeUsuario = localStorage.getItem('pregador_nome') || '';
+        let fotoPerfilBase64 = localStorage.getItem('pregador_foto_perfil') || '';
         let appAtivado = localStorage.getItem('pregador_pro_ativado') === 'true';
         let esbocoAtualId = null;
         let idParaExcluir = null;
@@ -482,10 +551,6 @@
         let pulpitoEscuro = false;
 
         document.addEventListener('DOMContentLoaded', () => {
-            if (!appAtivado) {
-                document.getElementById('modalBloqueio').classList.remove('hidden');
-                return;
-            }
             iniciarAplicativoPrincipal();
         });
 
@@ -495,11 +560,16 @@
                 localStorage.setItem('pregador_pro_ativado', 'true');
                 appAtivado = true;
                 document.getElementById('modalBloqueio').classList.add('hidden');
-                alert("✨ Aplicativo ativado com sucesso!");
-                iniciarAplicativoPrincipal();
+                alert("✨ Aplicativo ativado no Plano Pro com sucesso!");
+                atualizarInterfacePlano();
+                renderizarHome();
             } else {
                 alert("❌ Chave inválida. Verifique o código de acesso.");
             }
+        }
+
+        function fecharModalUpgrade() {
+            document.getElementById('modalUpgrade').classList.add('hidden');
         }
 
         function iniciarAplicativoPrincipal() {
@@ -521,12 +591,77 @@
                 });
                 salvarStorage();
             }
+            atualizarInterfacePlano();
+            atualizarFotoPerfilExibicao();
             renderizarHome();
             renderizarAgenda();
             setInterval(atualizarRelogio, 1000);
         }
 
-        // Funções de Backup e Restauração
+        function atualizarInterfacePlano() {
+            const banner = document.getElementById('bannerPlano');
+            const tituloPlano = document.getElementById('bannerTituloPlano');
+            const descPlano = document.getElementById('bannerDescPlano');
+            const perfilStatus = document.getElementById('perfilStatusBadge');
+
+            if (appAtivado) {
+                if(banner) banner.className = "bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl p-4 text-white shadow-md flex items-center justify-between";
+                if(tituloPlano) tituloPlano.innerText = "Plano Pro Ativo 🌟";
+                if(descPlano) descPlano.innerText = "Você tem acesso ilimitado a todos os sermões e recursos!";
+                if(perfilStatus) {
+                    perfilStatus.innerText = "Pro";
+                    perfilStatus.className = "block text-lg font-bold text-emerald-600 dark:text-emerald-400";
+                }
+                const btnBanner = banner ? banner.querySelector('a') : null;
+                if(btnBanner) btnBanner.style.display = 'none';
+            } else {
+                if(perfilStatus) {
+                    perfilStatus.innerText = "Grátis";
+                    perfilStatus.className = "block text-lg font-bold text-purple-600 dark:text-purple-400";
+                }
+            }
+        }
+
+        function carregarFotoGaleria(event) {
+            const arquivo = event.target.files[0];
+            if (!arquivo) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                fotoPerfilBase64 = e.target.result;
+                localStorage.setItem('pregador_foto_perfil', fotoPerfilBase64);
+                atualizarFotoPerfilExibicao();
+                alert("✨ Foto de perfil atualizada com sucesso!");
+            };
+            reader.readAsDataURL(arquivo);
+        }
+
+        function atualizarFotoPerfilExibicao() {
+            const elInicial = document.getElementById('perfilAvatarInicial');
+            const elImg = document.getElementById('perfilAvatarImg');
+
+            if (fotoPerfilBase64) {
+                elImg.src = fotoPerfilBase64;
+                elImg.classList.remove('hidden');
+                elInicial.classList.add('hidden');
+            } else {
+                elImg.classList.add('hidden');
+                elInicial.classList.remove('hidden');
+                if (nomeUsuario) {
+                    elInicial.innerText = nomeUsuario.charAt(0).toUpperCase();
+                }
+            }
+        }
+
+        function limparTodosDadosApp() {
+            const confirmacao = confirm("⚠️ ATENÇÃO: Deseja realmente apagar todos os dados do aplicativo (sermões salvos, agenda, nome e foto)? Esta ação não pode ser desfeita!");
+            if (confirmacao) {
+                localStorage.clear();
+                alert("✨ Todos os dados foram apagados com sucesso. O aplicativo será reiniciado.");
+                location.reload();
+            }
+        }
+
         function exportarBackup() {
             const dadosSermoes = localStorage.getItem('pregador_esbocos') || '[]';
             const dadosAgenda = localStorage.getItem('pregador_agenda') || '[]';
@@ -553,7 +688,6 @@
                 try {
                     const obj = JSON.parse(e.target.result);
                     if (Array.isArray(obj)) {
-                        // Compatibilidade com backups antigos apenas de sermões
                         localStorage.setItem('pregador_esbocos', JSON.stringify(obj));
                     } else if (obj && obj.sermoes) {
                         localStorage.setItem('pregador_esbocos', JSON.stringify(obj.sermoes));
@@ -568,7 +702,6 @@
             leitor.readAsText(arquivo);
         }
 
-        // Funções da Agenda
         function adicionarCompromissoAgenda() {
             const titulo = document.getElementById('agendaTitulo').value.trim();
             const data = document.getElementById('agendaData').value;
@@ -592,7 +725,6 @@
             salvarAgendaStorage();
             renderizarAgenda();
 
-            // Limpar inputs
             document.getElementById('agendaTitulo').value = '';
             document.getElementById('agendaData').value = '';
             document.getElementById('agendaHorario').value = '';
@@ -749,6 +881,7 @@
             localStorage.setItem('pregador_nome', nomeUsuario);
             document.getElementById('modalOnboarding').classList.add('hidden');
             atualizarSaudacao();
+            atualizarFotoPerfilExibicao();
         }
 
         function atualizarSaudacao() {
@@ -759,11 +892,10 @@
 
             const elSaudacao = document.getElementById('saudacaoNome');
             const elPerfilNome = document.getElementById('perfilNomeExibicao');
-            const elAvatar = document.getElementById('perfilAvatarInicial');
 
             if (elSaudacao) elSaudacao.innerText = `${saudacao}, ${nomeUsuario}`;
             if (elPerfilNome) elPerfilNome.innerText = nomeUsuario;
-            if (elAvatar) elAvatar.innerText = nomeUsuario.charAt(0).toUpperCase();
+            atualizarFotoPerfilExibicao();
         }
 
         function abrirModalAlterarNome() {
@@ -871,6 +1003,11 @@
         }
 
         function novoEsboco() {
+            if (!appAtivado && esbocos.length >= LIMITE_SERMOES_GRATIS) {
+                document.getElementById('modalUpgrade').classList.remove('hidden');
+                return;
+            }
+
             const dataAtual = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }).replace('.', '');
             const novo = {
                 id: Date.now().toString(),
@@ -933,7 +1070,13 @@
                 (e.versiculo && e.versiculo.toLowerCase().includes(termo))
             );
 
-            document.getElementById('contadorMensagens').innerText = `${esbocos.length} mensagens salvas`;
+            if (!appAtivado) {
+                document.getElementById('contadorMensagens').innerText = `${esbocos.length}/${LIMITE_SERMOES_GRATIS} mensagens salvas (Plano Grátis)`;
+                const descPlano = document.getElementById('bannerDescPlano');
+                if(descPlano) descPlano.innerText = `Você usou ${esbocos.length} de ${LIMITE_SERMOES_GRATIS} sermões grátis. Adquira o Pro!`;
+            } else {
+                document.getElementById('contadorMensagens').innerText = `${esbocos.length} mensagens salvas (Ilimitado Pro)`;
+            }
 
             if (filtrados.length === 0) {
                 container.innerHTML = `<div class="p-6 text-center text-sm text-slate-400">Nenhuma mensagem encontrada.</div>`;
