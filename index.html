@@ -83,7 +83,34 @@
                 Ativar Acesso Pro
             </button>
             
-            <p class="text-[11px] text-slate-400">Adquiriu a chave pelo WhatsApp? Insira o código recebido.</p>
+            <button type="button" onclick="fecharModalBloqueio()" class="w-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium py-2.5 rounded-xl text-xs hover:bg-slate-200 transition-colors">
+                Voltar
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL DE ESCOLHA PRO (WHATSAPP OU INSERIR CHAVE) -->
+    <div id="modalEscolhaPro" class="fixed inset-0 bg-slate-950/80 z-[120] flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-sm w-full shadow-2xl space-y-5 border border-slate-200 dark:border-slate-800 text-center">
+            <div class="w-14 h-14 bg-purple-100 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 rounded-2xl mx-auto flex items-center justify-center">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Liberar Versão Pro</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">Escolha uma das opções abaixo para continuar:</p>
+            </div>
+            
+            <div class="space-y-2.5 pt-1">
+                <a href="https://wa.me/5582999173401?text=Paz%20do%20Senhor!%20Quero%20adquirir%20a%20versão%20vitalícia%20do%20PregadorPro." target="_blank" class="block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 rounded-xl text-sm shadow-lg shadow-emerald-600/30 transition-all text-center">
+                    💬 Adquirir Chave no WhatsApp
+                </a>
+                <button type="button" onclick="abrirModalInserirChaveDeEscolha()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 rounded-xl text-sm shadow-lg shadow-purple-600/20 transition-all">
+                    🔑 Já tenho uma Chave de Ativação
+                </button>
+                <button type="button" onclick="fecharModalEscolhaPro()" class="w-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium py-2.5 rounded-xl text-xs hover:bg-slate-200 transition-colors">
+                    Cancelar
+                </button>
+            </div>
         </div>
     </div>
 
@@ -102,8 +129,11 @@
                 <a href="https://wa.me/5582999173401?text=Paz%20do%20Senhor!%20Quero%20adquirir%20a%20versão%20vitalícia%20do%20PregadorPro." target="_blank" class="block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 rounded-xl text-sm shadow-lg shadow-emerald-600/30 transition-all text-center">
                     💬 Adquirir Versão Pro no WhatsApp
                 </a>
+                <button type="button" onclick="abrirModalInserirChaveDoLimite()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 rounded-xl text-sm shadow-lg shadow-purple-600/20 transition-all">
+                    🔑 Já tenho uma Chave
+                </button>
                 <button type="button" onclick="fecharModalUpgrade()" class="w-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium py-2.5 rounded-xl text-xs hover:bg-slate-200 transition-colors">
-                    Já tenho uma chave / Voltar
+                    Voltar
                 </button>
             </div>
         </div>
@@ -192,15 +222,15 @@
                     </div>
                 </div>
 
-                <!-- BANNER DE STATUS DO PLANO (DIRECIONA PARA WHATSAPP) -->
+                <!-- BANNER DE STATUS DO PLANO (ABRE O MODAL DE ESCOLHA) -->
                 <div id="bannerPlano" class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-4 text-white shadow-md flex items-center justify-between">
                     <div>
                         <span id="bannerTituloPlano" class="text-xs uppercase font-bold tracking-wider bg-white/20 px-2 py-0.5 rounded">Plano Gratuito</span>
                         <p id="bannerDescPlano" class="text-sm font-medium mt-1">Crie até 3 sermões. Adquira o ilimitado com o desenvolvedor!</p>
                     </div>
-                    <a href="https://wa.me/5582999173401?text=Paz%20do%20Senhor!%20Quero%20adquirir%20a%20versão%20vitalícia%20do%20PregadorPro." target="_blank" class="bg-white text-purple-700 font-bold px-3 py-2 rounded-xl text-xs shadow hover:bg-purple-50 transition-colors shrink-0 ml-2">
+                    <button type="button" onclick="abrirModalEscolhaPro()" class="bg-white text-purple-700 font-bold px-3.5 py-2.5 rounded-xl text-xs shadow hover:bg-purple-50 transition-colors shrink-0 ml-2">
                         Quero Pro
-                    </a>
+                    </button>
                 </div>
 
                 <div class="relative">
@@ -554,12 +584,36 @@
             iniciarAplicativoPrincipal();
         });
 
+        function abrirModalEscolhaPro() {
+            document.getElementById('modalEscolhaPro').classList.remove('hidden');
+        }
+
+        function fecharModalEscolhaPro() {
+            document.getElementById('modalEscolhaPro').classList.add('hidden');
+        }
+
+        function abrirModalInserirChaveDeEscolha() {
+            document.getElementById('modalEscolhaPro').classList.add('hidden');
+            document.getElementById('modalBloqueio').classList.remove('hidden');
+        }
+
+        function abrirModalInserirChaveDoLimite() {
+            document.getElementById('modalUpgrade').classList.add('hidden');
+            document.getElementById('modalBloqueio').classList.remove('hidden');
+        }
+
+        function fecharModalBloqueio() {
+            document.getElementById('modalBloqueio').classList.add('hidden');
+        }
+
         function tentarAtivarApp() {
             const digitado = document.getElementById('inputChaveAtivacao').value.trim().toUpperCase();
             if (digitado === CHAVE_LICENCA_MESTRE) {
                 localStorage.setItem('pregador_pro_ativado', 'true');
                 appAtivado = true;
                 document.getElementById('modalBloqueio').classList.add('hidden');
+                document.getElementById('modalEscolhaPro').classList.add('hidden');
+                document.getElementById('modalUpgrade').classList.add('hidden');
                 alert("✨ Aplicativo ativado no Plano Pro com sucesso!");
                 atualizarInterfacePlano();
                 renderizarHome();
@@ -612,7 +666,7 @@
                     perfilStatus.innerText = "Pro";
                     perfilStatus.className = "block text-lg font-bold text-emerald-600 dark:text-emerald-400";
                 }
-                const btnBanner = banner ? banner.querySelector('a') : null;
+                const btnBanner = banner ? banner.querySelector('button') : null;
                 if(btnBanner) btnBanner.style.display = 'none';
             } else {
                 if(perfilStatus) {
